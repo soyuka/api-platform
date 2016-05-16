@@ -33,7 +33,7 @@ class Person
      */
     private $birthDate;
     /**
-     * @var string A short description of the item.
+     * @var string A description of the item.
      * 
      * @ORM\Column(nullable=true)
      * @Assert\Type(type="string")
@@ -41,7 +41,7 @@ class Person
      */
     private $description;
     /**
-     * @var string Gender of the person.
+     * @var string Gender of the person. While http://schema.org/Male and http://schema.org/Female may be used, text strings are also acceptable for people who do not identify as a binary gender.
      * 
      * @ORM\Column(nullable=true)
      * @Assert\Type(type="string")

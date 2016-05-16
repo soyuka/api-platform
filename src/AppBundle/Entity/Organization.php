@@ -25,7 +25,7 @@ class Organization
      */
     private $id;
     /**
-     * @var string A short description of the item.
+     * @var string A description of the item.
      * 
      * @ORM\Column(nullable=true)
      * @Assert\Type(type="string")

@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @Iri("http://schema.org/Book")
  */
-class Book extends CreativeWork
+class Book
 {
     /**
      * @var int
@@ -26,9 +26,42 @@ class Book extends CreativeWork
      */
     private $id;
     /**
+     * @var ArrayCollection<Person> The author of this content. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.
+     * 
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Person")
+     * @ORM\JoinTable(name="book_author")
+     * @Iri("https://schema.org/author")
+     */
+    private $author;
+    /**
+     * @var \DateTime Date of first broadcast/publication.
+     * 
+     * @ORM\Column(type="date", nullable=true)
+     * @Assert\Date
+     * @Iri("https://schema.org/datePublished")
+     */
+    private $datePublished;
+    /**
+     * @var string A description of the item.
+     * 
+     * @ORM\Column(nullable=true)
+     * @Assert\Type(type="string")
+     * @Iri("https://schema.org/description")
+     */
+    private $description;
+    /**
+     * @var string Genre of the creative work or group.
+     * 
+     * @ORM\Column(nullable=true)
+     * @Assert\Type(type="string")
+     * @Iri("https://schema.org/genre")
+     */
+    private $genre;
+    /**
      * @var ArrayCollection<Person> The illustrator of the book.
      * 
-     * @ORM\ManyToMany(targetEntity="Person")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Person")
+     * @ORM\JoinTable(name="book_illustrator")
      * @Iri("https://schema.org/illustrator")
      */
     private $illustrator;
@@ -41,6 +74,14 @@ class Book extends CreativeWork
      */
     private $isbn;
     /**
+     * @var string The name of the item.
+     * 
+     * @ORM\Column(nullable=true)
+     * @Assert\Type(type="string")
+     * @Iri("https://schema.org/name")
+     */
+    private $name;
+    /**
      * @var int The number of pages in the book.
      * 
      * @ORM\Column(type="integer", nullable=true)
@@ -48,11 +89,17 @@ class Book extends CreativeWork
      * @Iri("https://schema.org/numberOfPages")
      */
     private $numberOfPages;
+    /**
+     * @var Organization The publisher of the creative work.
+     * 
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Organization")
+     * @Iri("https://schema.org/publisher")
+     */
+    private $publisher;
 
     public function __construct()
     {
-        parent::__construct();
-
+        $this->author = new ArrayCollection();
         $this->illustrator = new ArrayCollection();
     }
 
@@ -81,6 +128,116 @@ class Book extends CreativeWork
     }
 
     /**
+     * Adds author.
+     * 
+     * @param Person $author
+     * 
+     * @return $this
+     */
+    public function addAuthor(Person $author)
+    {
+        $this->author[] = $author;
+
+        return $this;
+    }
+
+    /**
+     * Removes author.
+     * 
+     * @param Person $author
+     * 
+     * @return $this
+     */
+    public function removeAuthor(Person $author)
+    {
+        $this->author->removeElement($author);
+
+        return $this;
+    }
+
+    /**
+     * Gets author.
+     * 
+     * @return ArrayCollection<Person>
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * Sets datePublished.
+     * 
+     * @param \DateTime $datePublished
+     * 
+     * @return $this
+     */
+    public function setDatePublished(\DateTime $datePublished = null)
+    {
+        $this->datePublished = $datePublished;
+
+        return $this;
+    }
+
+    /**
+     * Gets datePublished.
+     * 
+     * @return \DateTime
+     */
+    public function getDatePublished()
+    {
+        return $this->datePublished;
+    }
+
+    /**
+     * Sets description.
+     * 
+     * @param string $description
+     * 
+     * @return $this
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Gets description.
+     * 
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Sets genre.
+     * 
+     * @param string $genre
+     * 
+     * @return $this
+     */
+    public function setGenre($genre)
+    {
+        $this->genre = $genre;
+
+        return $this;
+    }
+
+    /**
+     * Gets genre.
+     * 
+     * @return string
+     */
+    public function getGenre()
+    {
+        return $this->genre;
+    }
+
+    /**
      * Adds illustrator.
      * 
      * @param Person $illustrator
@@ -103,10 +260,7 @@ class Book extends CreativeWork
      */
     public function removeIllustrator(Person $illustrator)
     {
-        $key = array_search($illustrator, $this->illustrator, true);
-        if (false !== $key) {
-            unset($this->illustrator[$key]);
-        }
+        $this->illustrator->removeElement($illustrator);
 
         return $this;
     }
@@ -146,6 +300,30 @@ class Book extends CreativeWork
     }
 
     /**
+     * Sets name.
+     * 
+     * @param string $name
+     * 
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Gets name.
+     * 
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * Sets numberOfPages.
      * 
      * @param int $numberOfPages
@@ -167,5 +345,29 @@ class Book extends CreativeWork
     public function getNumberOfPages()
     {
         return $this->numberOfPages;
+    }
+
+    /**
+     * Sets publisher.
+     * 
+     * @param Organization $publisher
+     * 
+     * @return $this
+     */
+    public function setPublisher(Organization $publisher = null)
+    {
+        $this->publisher = $publisher;
+
+        return $this;
+    }
+
+    /**
+     * Gets publisher.
+     * 
+     * @return Organization
+     */
+    public function getPublisher()
+    {
+        return $this->publisher;
     }
 }
