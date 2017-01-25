@@ -27,9 +27,9 @@ RUN pecl install \
 
 # Apache config
 RUN a2enmod rewrite
-ADD docker/apache/vhost.conf /etc/apache2/sites-available/000-default.conf
 
-# PHP config
+ADD docker/apache/envvars /etc/apache2/envvars
+ADD docker/apache/vhost.conf /etc/apache2/sites-available/000-default.conf
 ADD docker/php/php.ini /usr/local/etc/php/php.ini
 
 # Install Git
@@ -39,22 +39,17 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Add the application
-ADD . /app
-WORKDIR /app
+ADD . /var/www/app
+WORKDIR /var/www/app
 
 # Install composer
 RUN ./docker/composer.sh \
-    && mv composer.phar /usr/bin/composer \
-    && composer global require "hirak/prestissimo:^0.3"
+    && mv composer.phar /usr/bin/composer
 
-RUN \
-    # Remove var directory if it's accidentally included
-    (rm -rf var || true) \
-    # Create the var sub-directories
-    && mkdir -p var/cache var/logs var/sessions \
-    # Install dependencies
-    && composer install --optimize-autoloader --no-scripts \
-    # Fixes permissions issues in non-dev mode
-    && chown -R www-data . var/cache var/logs var/sessions
+RUN chmod +x /usr/bin/composer
+
+RUN (rm -rf var || true)
+RUN mkdir -p var/cache var/logs var/sessions
+RUN chown -R www-data:www-data /var/www
 
 CMD ["/app/docker/start.sh"]
