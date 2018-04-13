@@ -6,16 +6,14 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Entity\Person;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Controller\Custom;
 
 /**
  * Class PersonList
  * @package App\Entity
  * @ApiResource(
  *     itemOperations={
- *          "get",
- *     },
- *     collectionOperations={
- *       "get","post"
+ *          "get", "put", "delete",
  *     },
  *     attributes={
  *          "denormalization_context"={
