@@ -9,7 +9,6 @@ use App\Dto\UserUpdatePassword;
 
 /**
  * @ApiResource(
- *   itemOperations={"get", "put", "delete", "reset_password"={"method"="PUT", "path"="/users/{id}/reset-pasword", "status"=202, "input"=UserUpdatePassword::class, "output"=false}}
  * )
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
