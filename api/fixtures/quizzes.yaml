@@ -1,0 +1,20 @@
+App\Entity\Answer:
+    answer_{1..100}:
+        description : <sentence()>
+        position: <randomDigitNotNull()>
+        correct: <boolean()>
+        question: '@question_*'
+
+App\Entity\Question:
+    question_{1..50}:
+        description : <sentence()>
+        answers: '4x @answer_*'
+        quiz: '@quiz_*'
+
+App\Entity\Quiz:
+    quiz_{1..10}:
+        questions: '10x @question_*'
+
+App\Entity\User:
+    user_{1..10}:
+        email: <email()>
