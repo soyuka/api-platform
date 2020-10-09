@@ -1,4 +1,8 @@
 api_platform:
+    collection:
+        pagination:
+            client_items_per_page: true
+            items_per_page_parameter_name: itemsPerPage
     title: Hello API Platform
     version: 1.0.0
     mapping:
@@ -7,6 +11,10 @@ api_platform:
         json: ['application/merge-patch+json']
     swagger:
         versions: [3]
+        api_keys:
+            apiKey:
+               name: Authorization
+               type: header
     # Mercure integration, remove if unwanted
     mercure:
         hub_url: '%env(MERCURE_SUBSCRIBE_URL)%'
