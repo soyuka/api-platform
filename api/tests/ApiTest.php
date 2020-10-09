@@ -11,7 +11,6 @@ class UsersTest extends ApiTestCase
     public function testCreateUser()
     {
         $client = static::createClient();
-        $client->loginUser(new User);
         $response = $client->request('POST', '/users', ['json' => [
             'email' => 'dunglas+test@gmail.com'
         ]]);
@@ -19,12 +18,5 @@ class UsersTest extends ApiTestCase
  
         $responseContent = $response->toArray();
         $this->assertStringStartsWith('/users/', $responseContent['@id']);
- 
-        // $this->assertArraySubset([
-        //     '@type' => 'http://schema.org/Person',
-        //     'email' => 'dunglas+test@gmail.com',
-        // ], $responseContent);
-        // $this->assertArrayNotHasKey('password', $responseContent);
-        // $this->assertArrayNotHasKey('plainPassword', $responseContent);
     }
 }

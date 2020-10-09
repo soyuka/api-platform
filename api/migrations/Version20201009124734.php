@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20201009121723 extends AbstractMigration
+final class Version20201009124734 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -20,10 +20,6 @@ final class Version20201009121723 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE car DROP CONSTRAINT fk_773de69d44f5d008');
-        $this->addSql('DROP SEQUENCE greeting_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE brand_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE car_id_seq CASCADE');
         $this->addSql('CREATE SEQUENCE answer_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE exercice_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE question_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
@@ -40,9 +36,6 @@ final class Version20201009121723 extends AbstractMigration
         $this->addSql('ALTER TABLE exercice ADD CONSTRAINT FK_E418C74D853CD175 FOREIGN KEY (quiz_id) REFERENCES quiz (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE exercice ADD CONSTRAINT FK_E418C74DCB944F1A FOREIGN KEY (student_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE question ADD CONSTRAINT FK_B6F7494E853CD175 FOREIGN KEY (quiz_id) REFERENCES quiz (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('DROP TABLE greeting');
-        $this->addSql('DROP TABLE brand');
-        $this->addSql('DROP TABLE car');
     }
 
     public function down(Schema $schema) : void
@@ -56,14 +49,6 @@ final class Version20201009121723 extends AbstractMigration
         $this->addSql('DROP SEQUENCE exercice_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE question_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE quiz_id_seq CASCADE');
-        $this->addSql('CREATE SEQUENCE greeting_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE brand_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE car_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE TABLE greeting (id INT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE TABLE brand (id INT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE TABLE car (id INT NOT NULL, brand_id INT NOT NULL, color VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE INDEX idx_773de69d44f5d008 ON car (brand_id)');
-        $this->addSql('ALTER TABLE car ADD CONSTRAINT fk_773de69d44f5d008 FOREIGN KEY (brand_id) REFERENCES brand (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('DROP TABLE answer');
         $this->addSql('DROP TABLE exercice');
         $this->addSql('DROP TABLE question');

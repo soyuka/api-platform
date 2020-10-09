@@ -1,8 +1,4 @@
 api_platform:
-    collection:
-        pagination:
-            client_items_per_page: true
-            items_per_page_parameter_name: itemsPerPage
     title: Hello API Platform
     version: 1.0.0
     mapping:
